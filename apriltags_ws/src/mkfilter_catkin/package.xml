@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>mkfilter_catkin</name>
+  <version>4.6.0</version>
+  <description>
+      Catkin C++ API binding and wrapper around
+      mkfilter command by A.J. Fisher, University of York
+  </description>
+
+  <maintainer email="quentin.rouxel@ed.ac.uk">Leph</maintainer>
+
+  <license>ZLIB</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>cmake</buildtool_depend>
+</package>

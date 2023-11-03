@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package format="2">
+    <name>inria_eiquadprog</name>
+    <version>0.0.0</version>
+    <description>
+        Catkin package for customized eiquadprog QP solver.
+        See http://www.labri.fr/perso/guenneba/code/QuadProg/
+    </description>
+    <maintainer email="leph.quentinrouxel@gmail.com">Quentin Rouxel</maintainer>
+    <license>BSD</license>
+
+    <buildtool_depend>catkin</buildtool_depend>
+</package>
