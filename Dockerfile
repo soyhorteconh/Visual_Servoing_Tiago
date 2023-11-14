@@ -47,6 +47,9 @@ RUN mkdir -p /root/apriltags_ws/src && \
     "source /opt/ros/*/setup.bash && \
     cd /root/apriltags_ws && catkin init && \
     catkin config --extend /opt/ros/melodic --install -DCMAKE_BUILD_TYPE=Release"
+#Install eigen
+RUN apt-get install -y \
+    libeigen3-dev
 
 #Install glxgears
 RUN apt-get install -y \
