@@ -14,8 +14,8 @@ class AprilTag
         Eigen::Vector3d past_position;
         Eigen::Quaterniond past_orientation;
 
-        Eigen::Vector3d position_filter;
-        Eigen::Quaterniond orientation_filter;
+        // Eigen::Vector3d position_filter;
+        // Eigen::Quaterniond orientation_filter;
 
         bool detected = false;
 
@@ -99,15 +99,15 @@ class AprilTag
             return orientation;
         }
 
-        Eigen::Vector3d getPostionFilter()
-        {
-            return position_filter;
-        }
+        // Eigen::Vector3d getPostionFilter()
+        // {
+        //     return position_filter;
+        // }
 
-        Eigen::Quaterniond getOrientationFilter()
-        {
-            return orientation_filter;
-        }
+        // Eigen::Quaterniond getOrientationFilter()
+        // {
+        //     return orientation_filter;
+        // }
 
         bool getDetected()
         {
@@ -134,15 +134,15 @@ class AprilTag
             orientation = update_orientation;
         }
 
-        void setPostionFilter(Eigen::Vector3d position_filter_value)
-        {
-            position_filter = position_filter_value;
-        }
+        // void setPostionFilter(Eigen::Vector3d position_filter_value)
+        // {
+        //     position_filter = position_filter_value;
+        // }
 
-        void setOrientationFilter(Eigen::Quaterniond orientation_filter_value)
-        {
-            orientation_filter = orientation_filter_value;
-        }
+        // void setOrientationFilter(Eigen::Quaterniond orientation_filter_value)
+        // {
+        //     orientation_filter = orientation_filter_value;
+        // }
 
 };
 

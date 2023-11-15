@@ -140,7 +140,7 @@ add_executable(${PROJECT_NAME}_single_image_client_node src/${PROJECT_NAME}_sing
 add_dependencies(${PROJECT_NAME}_single_image_client_node ${PROJECT_NAME}_generate_messages_cpp)
 target_link_libraries(${PROJECT_NAME}_single_image_client_node ${PROJECT_NAME}_common ${catkin_LIBRARIES})
 
-add_executable(apriltag_information_node scripts/apriltag_information_node_v2.cpp)
+add_executable(apriltag_information_node scripts/apriltag_information_node.cpp)
 target_link_libraries(apriltag_information_node ${catkin_LIBRARIES})
 add_dependencies(apriltag_information_node ${PROJECT_NAME}_generate_messages_cpp)
 

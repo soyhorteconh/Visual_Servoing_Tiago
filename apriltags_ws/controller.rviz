@@ -12,6 +12,7 @@ Panels:
         - /Pose3
         - /Pose4
         - /Pose5
+        - /Pose6
       Splitter Ratio: 0.5
     Tree Height: 725
   - Class: rviz/Selection
@@ -63,7 +64,7 @@ Visualization Manager:
       Marker Topic: /markers
       Name: Marker
       Namespaces:
-        {}
+        target: true
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -141,6 +142,21 @@ Visualization Manager:
       Topic: /tag/pose
       Unreliable: false
       Value: true
+    - Alpha: 1
+      Axes Length: 0.04500000178813934
+      Axes Radius: 0.009999999776482582
+      Class: rviz/Pose
+      Color: 255; 25; 0
+      Enabled: true
+      Head Length: 0.30000001192092896
+      Head Radius: 0.10000000149011612
+      Name: Pose
+      Shaft Length: 1
+      Shaft Radius: 0.05000000074505806
+      Shape: Axes
+      Topic: /robot_hand
+      Unreliable: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -169,7 +185,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 3.285923719406128
+      Distance: 0.8574390411376953
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -184,10 +200,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.605202853679657
+      Pitch: -1.5697963237762451
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.9935474395751953
+      Yaw: 4.726724147796631
     Saved: ~
 Window Geometry:
   Displays:

@@ -33,16 +33,23 @@ class VelocityControl
 
         // saturated velocity controller
         std::pair<Eigen::Vector3d,Eigen::Vector3d> controller(
-            const Eigen::Vector3d desired_position, const Eigen::Matrix3d desired_rotation,
-            const Eigen::Vector3d current_position, const Eigen::Matrix3d current_rotation)
+            const Eigen::Vector3d desired_position, const Eigen::Matrix3d desired_rotation_r,
+            const Eigen::Vector3d current_position, const Eigen::Matrix3d current_rotation_r)
         {
+            // normalized quaternions
+            Eigen::Quaterniond current_rotation_q(current_rotation_r);
+            Eigen::Matrix3d current_rotation = current_rotation_q.normalized().toRotationMatrix();
+
+            Eigen::Quaterniond desired_rotation_q(desired_rotation_r);
+            Eigen::Matrix3d desired_rotation = desired_rotation_q.normalized().toRotationMatrix();
+
             // error
             rotation_error = current_rotation.transpose() * desired_rotation;
             position_error = current_rotation.transpose() * (desired_position - current_position);
-            // std::cout << "Error position" << std::endl;
-            // std::cout << "x: " << position_error.x() << std::endl;
-            // std::cout << "y: " << position_error.y() << std::endl;
-            // std::cout << "z: " << position_error.z() << std::endl;
+            std::cout << "Error position" << std::endl;
+            std::cout << "x: " << position_error.x() << std::endl;
+            std::cout << "y: " << position_error.y() << std::endl;
+            std::cout << "z: " << position_error.z() << std::endl;
 
             // velocity
             Eigen::Vector3d angular_v = angular_kp * (inria::MatrixToAxis(rotation_error));
@@ -57,40 +64,39 @@ class VelocityControl
             linear_norm = std::min(linear_norm, linear_max_velocity);
             linear_v = linear_norm * linear_v.normalized();
 
-            // Eigen::Vector3d linear_v(0.0,0.0,0.0);
-            // Eigen::Vector3d angular_v(0.0, 0.0, 0.07);
+            // Eigen::Vector3d linear_v(0.0, 0.01 ,0.0);
+            //Eigen::Vector3d angular_v(0.0, 0.0, 0.0);
 
             // final velocity to retun
             std::pair<Eigen::Vector3d,Eigen::Vector3d> velocity(linear_v, angular_v);
 
             // pose integration 
             // to predict next pose 
-            Eigen::Matrix3d m = inria::AxisToMatrix(angular_v * dt);
-            estimated_rotation = current_rotation * m;
-            estimated_position = current_position + current_rotation * (linear_v * dt);
+            estimated_rotation = current_rotation * inria::AxisToMatrix(angular_v * dt);
+            estimated_position = current_rotation * (linear_v * dt) + current_position;
 
             return velocity;
         }
 
         // predicted rotation gets its value from a 
         // kalman filter computarization
-        Eigen::Quaterniond get_predicted_rotation(const Eigen::Matrix3d messured_rotation, double freq)
+        Eigen::Quaterniond get_predicted_rotation(const Eigen::Matrix3d measured_rotation, double freq)
         {
             double alpha =  get_alpha_from_freq(freq);
 
-            Eigen::Quaterniond messured_rotation_q(messured_rotation);
+            Eigen::Quaterniond measured_rotation_q(measured_rotation);
             Eigen::Quaterniond estimated_rotation_q(estimated_rotation);
-            Eigen::Quaterniond predicted_rotation_q = estimated_rotation_q.slerp(1 - alpha, messured_rotation_q);
+            Eigen::Quaterniond predicted_rotation_q = estimated_rotation_q.normalized().slerp(1 - alpha, measured_rotation_q.normalized());
 
             return predicted_rotation_q;
         }
 
         // predicted position gets its value from a 
         // kalman filter computarization
-        Eigen::Vector3d get_predicted_position(const Eigen::Vector3d messured_position, double freq)
+        Eigen::Vector3d get_predicted_position(const Eigen::Vector3d measured_position, double freq)
         {
             double alpha =  get_alpha_from_freq(freq);
-            Eigen::Vector3d predicted_position = alpha * estimated_position + (1 -  alpha) * messured_position;
+            Eigen::Vector3d predicted_position = alpha * estimated_position + (1 -  alpha) * measured_position;
             
             return predicted_position;
         }

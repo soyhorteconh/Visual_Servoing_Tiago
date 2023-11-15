@@ -115,11 +115,11 @@ int main(int argc, char **argv)
     tag_publisher = n.advertise<visualization_msgs::Marker>( "tag_visualization_rviz", 0 );
 
     // Subscribers
-    ros::Subscriber tag5_subscriber = n.subscribe("tag5/information", 1, tag5_cb);
-    ros::Subscriber tag6_subscriber = n.subscribe("tag6/information", 1, tag6_cb);
-    ros::Subscriber tag7_subscriber = n.subscribe("tag7/information", 1, tag7_cb); 
-    ros::Subscriber tag8_subscriber = n.subscribe("tag8/information", 1, tag8_cb);
-    ros::Subscriber tag10_subscriber = n.subscribe("tag10/information", 1, tag10_cb); 
+    ros::Subscriber tag5_subscriber = n.subscribe("tag5/filter", 1, tag5_cb);
+    ros::Subscriber tag6_subscriber = n.subscribe("tag6/filter", 1, tag6_cb);
+    ros::Subscriber tag7_subscriber = n.subscribe("tag7/filter", 1, tag7_cb); 
+    ros::Subscriber tag8_subscriber = n.subscribe("tag8/filter", 1, tag8_cb);
+    ros::Subscriber tag10_subscriber = n.subscribe("tag10/filter", 1, tag10_cb); 
     ros::Subscriber tag20_subscriber = n.subscribe("tag20/filter", 1, tag20_cb);
 
     // camera marker

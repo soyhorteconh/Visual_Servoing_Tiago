@@ -166,7 +166,7 @@ int main (int argc, char **argv)
             robot_hand_position.z() = robot_hand_detected.pose.pose.position.z;
             //      orientation
             rh_q = Eigen::Quaterniond(robot_hand_detected.pose.pose.orientation.w, robot_hand_detected.pose.pose.orientation.x, robot_hand_detected.pose.pose.orientation.y, robot_hand_detected.pose.pose.orientation.z);
-            robot_hand_rotation = rh_q.toRotationMatrix();
+            robot_hand_rotation = rh_q.normalized().toRotationMatrix();
 
             // tag information
             //      position
@@ -197,10 +197,10 @@ int main (int argc, char **argv)
             tag_position.z() = tag10_detected.coordinate_center.z;
             //      orientation
             Eigen::Quaterniond t_q(tag10_detected.orientation.w, tag10_detected.orientation.x, tag10_detected.orientation.y, tag10_detected.orientation.z);
-            tag_rotation = t_q.toRotationMatrix();
+            tag_rotation = t_q.normalized().toRotationMatrix();
 
             // calculating target pose from tag pose
-            double distance_tag_2_target = 0.35; 
+            double distance_tag_2_target = 0.3; 
 
             std::pair<Eigen::Vector3d, Eigen::Matrix3d> target_point = tag_2_targetpoint (
                 tag_position, tag_rotation, distance_tag_2_target);
@@ -210,10 +210,10 @@ int main (int argc, char **argv)
             Eigen::Vector3d target_position = target_point.first;
 
             // velocity controller parameters
-            double linear_kp = 0.5;
+            double linear_kp = 0.1;
             double angular_kp = 0.3;
-            double linear_max_velocity = 0.02;
-            double angular_max_velocity = 0.2;
+            double linear_max_velocity = 0.03;
+            double angular_max_velocity = 0.08;
             double dt = 0.0333;
 
             Eigen::Vector3d linear_v;
@@ -239,6 +239,8 @@ int main (int argc, char **argv)
                 
                 //velocity
                 linear_v = velocity.first;
+                //angular_v.setZero();
+                //linear_v.setZero();
                 angular_v = velocity.second;
                 
                 // getting estimated values
@@ -249,13 +251,14 @@ int main (int argc, char **argv)
                 // getting messured robot hand pose
                 Eigen::Vector3d measured_position(robot_hand_detected.pose.pose.position.x, robot_hand_detected.pose.pose.position.y, robot_hand_detected.pose.pose.position.z);
                 Eigen::Quaterniond measured_q(robot_hand_detected.pose.pose.orientation.w, robot_hand_detected.pose.pose.orientation.x, robot_hand_detected.pose.pose.orientation.y, robot_hand_detected.pose.pose.orientation.z);
-                Eigen::Matrix3d measured_rotation = measured_q.toRotationMatrix();
+                Eigen::Matrix3d measured_rotation = measured_q.normalized().toRotationMatrix();
 
                 // feedback
                 // (aqui)
-                robot_hand_position = velocity_control.get_predicted_position(estimated_position, 0.5);
-                rh_q = velocity_control.get_predicted_rotation(estimated_rotation, 0.5);
+                robot_hand_position = velocity_control.get_predicted_position(measured_position, 0.1);
+                rh_q = velocity_control.get_predicted_rotation(measured_rotation, 0.5);
                 robot_hand_rotation = rh_q.normalized().toRotationMatrix();
+                //robot_hand_position = estimated_position;
                 // robot_hand_rotation = estimated_rotation;
                 // rh_q = Eigen::Quaterniond(estimated_rotation);
             } 
@@ -272,7 +275,7 @@ int main (int argc, char **argv)
             double angular_error = inria::MatrixToAxis(rotation_error.toRotationMatrix()).norm();
             double linear_error = position_error.norm();
             
-            if(angular_error < 0.015 and linear_error < 0.015)
+            if(angular_error < 0.45 and linear_error < 0.015)
             {
                 //hand close
                 gripper = 1.0;

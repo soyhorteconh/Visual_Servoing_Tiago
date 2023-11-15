@@ -127,32 +127,32 @@ int main(int argc, char **argv)
     double tag7_start = ros::Time::now().toSec();
     double tag8_start = ros::Time::now().toSec();
 
-    //filters for position
-    inria::FilterExponential<Eigen::Vector3d> filter_tag5_position;
-    inria::FilterExponential<Eigen::Vector3d> filter_tag6_position;
-    inria::FilterExponential<Eigen::Vector3d> filter_tag7_position;
-    inria::FilterExponential<Eigen::Vector3d> filter_tag8_position;
-    inria::FilterExponential<Eigen::Vector3d> filter_tag10_position;
+    // //filters for position
+    // inria::FilterExponential<Eigen::Vector3d> filter_tag5_position;
+    // inria::FilterExponential<Eigen::Vector3d> filter_tag6_position;
+    // inria::FilterExponential<Eigen::Vector3d> filter_tag7_position;
+    // inria::FilterExponential<Eigen::Vector3d> filter_tag8_position;
+    // inria::FilterExponential<Eigen::Vector3d> filter_tag10_position;
 
-    // filter for pose
-    inria::FilterExponentialRotation filter_tag5_orientation;
-    inria::FilterExponentialRotation filter_tag6_orientation;
-    inria::FilterExponentialRotation filter_tag7_orientation;
-    inria::FilterExponentialRotation filter_tag8_orientation;
-    inria::FilterExponentialRotation filter_tag10_orientation;
+    // // filter for pose
+    // inria::FilterExponentialRotation filter_tag5_orientation;
+    // inria::FilterExponentialRotation filter_tag6_orientation;
+    // inria::FilterExponentialRotation filter_tag7_orientation;
+    // inria::FilterExponentialRotation filter_tag8_orientation;
+    // inria::FilterExponentialRotation filter_tag10_orientation;
 
-    //cutoff Frequency
-    filter_tag5_position.cutoffFrequency() = 1;
-    filter_tag6_position.cutoffFrequency() = 1;
-    filter_tag7_position.cutoffFrequency() = 1;
-    filter_tag8_position.cutoffFrequency() = 1;
-    filter_tag10_position.cutoffFrequency() = 1;
+    // //cutoff Frequency
+    // filter_tag5_position.cutoffFrequency() = 1;
+    // filter_tag6_position.cutoffFrequency() = 1;
+    // filter_tag7_position.cutoffFrequency() = 1;
+    // filter_tag8_position.cutoffFrequency() = 1;
+    // filter_tag10_position.cutoffFrequency() = 1;
 
-    filter_tag5_orientation.cutoffFrequency() = 1;
-    filter_tag6_orientation.cutoffFrequency() = 1;
-    filter_tag7_orientation.cutoffFrequency() = 1;
-    filter_tag8_orientation.cutoffFrequency() = 1;
-    filter_tag10_orientation.cutoffFrequency() = 1;
+    // filter_tag5_orientation.cutoffFrequency() = 1;
+    // filter_tag6_orientation.cutoffFrequency() = 1;
+    // filter_tag7_orientation.cutoffFrequency() = 1;
+    // filter_tag8_orientation.cutoffFrequency() = 1;
+    // filter_tag10_orientation.cutoffFrequency() = 1;
 
     ros::Rate loop_rate(30);
     while(ros::ok())
@@ -195,12 +195,12 @@ int main(int argc, char **argv)
                         //get tag pose
                         tag10.activate(c1, c2, c3, c4, center, depth_image);
 
-                        //filter
-                        filter_tag10_position.update(tag10.getPosition(), 0.0333);
-                        tag10.setPostionFilter(filter_tag10_position.value());
+                        // //filter
+                        // filter_tag10_position.update(tag10.getPosition(), 0.0333);
+                        // tag10.setPostionFilter(filter_tag10_position.value());
 
-                        filter_tag10_orientation.update(tag10.getOrientation(), 0.0333);
-                        tag10.setOrientationFilter(filter_tag10_orientation.valueQuaternion());
+                        // filter_tag10_orientation.update(tag10.getOrientation(), 0.0333);
+                        // tag10.setOrientationFilter(filter_tag10_orientation.valueQuaternion());
                     }
 
                     // tag6 detected
@@ -213,12 +213,12 @@ int main(int argc, char **argv)
                         tag5.activate(c1, c2, c3, c4, center, depth_image);
                         robot_hand_tags.push_back(5);
 
-                        //filter
-                        filter_tag5_position.update(tag5.getPosition(), 0.0333);
-                        tag5.setPostionFilter(filter_tag5_position.value());
+                        // //filter
+                        // filter_tag5_position.update(tag5.getPosition(), 0.0333);
+                        // tag5.setPostionFilter(filter_tag5_position.value());
 
-                        filter_tag5_orientation.update(tag5.getOrientation(), 0.0333);
-                        tag5.setOrientationFilter(filter_tag5_orientation.valueQuaternion());
+                        // filter_tag5_orientation.update(tag5.getOrientation(), 0.0333);
+                        // tag5.setOrientationFilter(filter_tag5_orientation.valueQuaternion());
                     }
 
                     // tag6 detected
@@ -231,12 +231,12 @@ int main(int argc, char **argv)
                         tag6.activate(c1, c2, c3, c4, center, depth_image);
                         robot_hand_tags.push_back(6);
 
-                        //filter
-                        filter_tag6_position.update(tag6.getPosition(), 0.0333);
-                        tag6.setPostionFilter(filter_tag6_position.value());
+                        // //filter
+                        // filter_tag6_position.update(tag6.getPosition(), 0.0333);
+                        // tag6.setPostionFilter(filter_tag6_position.value());
 
-                        filter_tag6_orientation.update(tag6.getOrientation(), 0.0333);
-                        tag6.setOrientationFilter(filter_tag6_orientation.valueQuaternion());
+                        // filter_tag6_orientation.update(tag6.getOrientation(), 0.0333);
+                        // tag6.setOrientationFilter(filter_tag6_orientation.valueQuaternion());
                     }
 
                     // tag7 detected
@@ -249,12 +249,12 @@ int main(int argc, char **argv)
                         tag7.activate(c1, c2, c3, c4, center, depth_image);
                         robot_hand_tags.push_back(7);
 
-                        //filter
-                        filter_tag7_position.update(tag7.getPosition(), 0.0333);
-                        tag7.setPostionFilter(filter_tag7_position.value());
+                        // //filter
+                        // filter_tag7_position.update(tag7.getPosition(), 0.0333);
+                        // tag7.setPostionFilter(filter_tag7_position.value());
 
-                        filter_tag7_orientation.update(tag7.getOrientation(), 0.0333);
-                        tag7.setOrientationFilter(filter_tag7_orientation.valueQuaternion());
+                        // filter_tag7_orientation.update(tag7.getOrientation(), 0.0333);
+                        // tag7.setOrientationFilter(filter_tag7_orientation.valueQuaternion());
                     }
 
                     // tag8 detected
@@ -267,12 +267,12 @@ int main(int argc, char **argv)
                         tag8.activate(c1, c2, c3, c4, center, depth_image);
                         robot_hand_tags.push_back(8);
 
-                        //filter
-                        filter_tag8_position.update(tag8.getPosition(), 0.0333);
-                        tag8.setPostionFilter(filter_tag8_position.value());
+                        // //filter
+                        // filter_tag8_position.update(tag8.getPosition(), 0.0333);
+                        // tag8.setPostionFilter(filter_tag8_position.value());
 
-                        filter_tag8_orientation.update(tag8.getOrientation(), 0.0333);
-                        tag8.setOrientationFilter(filter_tag8_orientation.valueQuaternion());
+                        // filter_tag8_orientation.update(tag8.getOrientation(), 0.0333);
+                        // tag8.setOrientationFilter(filter_tag8_orientation.valueQuaternion());
                     }
                 }
             }
@@ -290,13 +290,13 @@ int main(int argc, char **argv)
                 else if (tag10_time_not_detected > delay_time)
                 {
                     tag10.setPostion(Eigen::Vector3d(0.0, 0.0, 0.0));
-                    tag10.setOrientation(Eigen::Quaterniond(0.0, 0.0, 0.0, 0.0));
+                    tag10.setOrientation(Eigen::Quaterniond(1.0, 0.0, 0.0, 0.0));
 
-                    filter_tag10_position.reset(Eigen::Vector3d(0,0,0));
-                    filter_tag10_orientation.reset(Eigen::Quaterniond(0,0,0,0));
+                    // filter_tag10_position.reset(Eigen::Vector3d(0,0,0));
+                    // filter_tag10_orientation.reset(Eigen::Quaterniond(0,0,0,0));
 
-                    tag10.setOrientationFilter(filter_tag10_orientation.valueQuaternion());
-                    tag10.setPostionFilter(filter_tag10_position.value());
+                    // tag10.setOrientationFilter(filter_tag10_orientation.valueQuaternion());
+                    // tag10.setPostionFilter(filter_tag10_position.value());
                 }
             }
 
@@ -310,13 +310,13 @@ int main(int argc, char **argv)
                 else if (tag5_time_not_detected > delay_time)
                 {
                     tag5.setPostion(Eigen::Vector3d(0.0, 0.0, 0.0));
-                    tag5.setOrientation(Eigen::Quaterniond(0.0, 0.0, 0.0, 0.0));
+                    tag5.setOrientation(Eigen::Quaterniond(1.0, 0.0, 0.0, 0.0));
 
-                    filter_tag5_position.reset(Eigen::Vector3d(0,0,0));
-                    filter_tag5_orientation.reset(Eigen::Quaterniond(0,0,0,0));
+                    // filter_tag5_position.reset(Eigen::Vector3d(0,0,0));
+                    // filter_tag5_orientation.reset(Eigen::Quaterniond(0,0,0,0));
 
-                    tag5.setOrientationFilter(filter_tag5_orientation.valueQuaternion());
-                    tag5.setPostionFilter(filter_tag5_position.value());
+                    // tag5.setOrientationFilter(filter_tag5_orientation.valueQuaternion());
+                    // tag5.setPostionFilter(filter_tag5_position.value());
                 }
             }
 
@@ -331,13 +331,13 @@ int main(int argc, char **argv)
                 else if (tag6_time_not_detected > delay_time)
                 {
                     tag6.setPostion(Eigen::Vector3d(0.0, 0.0, 0.0));
-                    tag6.setOrientation(Eigen::Quaterniond(0.0, 0.0, 0.0, 0.0));
+                    tag6.setOrientation(Eigen::Quaterniond(1.0, 0.0, 0.0, 0.0));
 
-                    filter_tag6_position.reset(Eigen::Vector3d(0,0,0));
-                    filter_tag6_orientation.reset(Eigen::Quaterniond(0,0,0,0));
+                    // filter_tag6_position.reset(Eigen::Vector3d(0,0,0));
+                    // filter_tag6_orientation.reset(Eigen::Quaterniond(0,0,0,0));
 
-                    tag6.setOrientationFilter(filter_tag6_orientation.valueQuaternion());
-                    tag6.setPostionFilter(filter_tag6_position.value());
+                    // tag6.setOrientationFilter(filter_tag6_orientation.valueQuaternion());
+                    // tag6.setPostionFilter(filter_tag6_position.value());
                 }
             }
             
@@ -352,13 +352,13 @@ int main(int argc, char **argv)
                 else if (tag7_time_not_detected > delay_time)
                 {
                     tag7.setPostion(Eigen::Vector3d(0.0, 0.0, 0.0));
-                    tag7.setOrientation(Eigen::Quaterniond(0.0, 0.0, 0.0, 0.0));
+                    tag7.setOrientation(Eigen::Quaterniond(1.0, 0.0, 0.0, 0.0));
 
-                    filter_tag7_position.reset(Eigen::Vector3d(0,0,0));
-                    filter_tag7_orientation.reset(Eigen::Quaterniond(0,0,0,0));
+                    // filter_tag7_position.reset(Eigen::Vector3d(0,0,0));
+                    // filter_tag7_orientation.reset(Eigen::Quaterniond(0,0,0,0));
 
-                    tag7.setOrientationFilter(filter_tag7_orientation.valueQuaternion());
-                    tag7.setPostionFilter(filter_tag7_position.value());
+                    // tag7.setOrientationFilter(filter_tag7_orientation.valueQuaternion());
+                    // tag7.setPostionFilter(filter_tag7_position.value());
                 }
             }
 
@@ -373,13 +373,13 @@ int main(int argc, char **argv)
                 else if (tag8_time_not_detected > delay_time)
                 {
                     tag8.setPostion(Eigen::Vector3d(0.0, 0.0, 0.0));
-                    tag8.setOrientation(Eigen::Quaterniond(0.0, 0.0, 0.0, 0.0));
+                    tag8.setOrientation(Eigen::Quaterniond(1.0, 0.0, 0.0, 0.0));
 
-                    filter_tag8_position.reset(Eigen::Vector3d(0,0,0));
-                    filter_tag8_orientation.reset(Eigen::Quaterniond(0,0,0,0));
+                    // filter_tag8_position.reset(Eigen::Vector3d(0,0,0));
+                    // filter_tag8_orientation.reset(Eigen::Quaterniond(0,0,0,0));
 
-                    tag8.setOrientationFilter(filter_tag8_orientation.valueQuaternion());
-                    tag8.setPostionFilter(filter_tag8_position.value());
+                    // tag8.setOrientationFilter(filter_tag8_orientation.valueQuaternion());
+                    // tag8.setPostionFilter(filter_tag8_position.value());
                 }
             }
 
@@ -396,9 +396,9 @@ int main(int argc, char **argv)
                 int tag_detected = robot_hand_tags.at(0);
                 if(tag_detected == 5)
                 {
-                    Eigen::Matrix3d robot_hand_orientation = tag5.getOrientationFilter().toRotationMatrix() * z_rotation(M_PI/2);
+                    Eigen::Matrix3d robot_hand_orientation = tag5.getOrientation().toRotationMatrix() * z_rotation(M_PI/2);
                     Eigen::Quaterniond robot_hand_q(robot_hand_orientation);
-                    Eigen::Vector3d robot_hand_position = robot_hand_orientation * z_translation(-0.045) +  tag5.getPostionFilter();
+                    Eigen::Vector3d robot_hand_position = robot_hand_orientation * z_translation(-0.045) +  tag5.getPosition();
 
                     robot_hand.setOrientation(robot_hand_q.normalized());
                     robot_hand.setPostion(robot_hand_position);
@@ -406,10 +406,10 @@ int main(int argc, char **argv)
                 }
                 else if(tag_detected == 6)
                 {
-                    Eigen::Matrix3d robot_hand_orientation = tag6.getOrientationFilter().toRotationMatrix() * z_rotation(-M_PI/2);
+                    Eigen::Matrix3d robot_hand_orientation = tag6.getOrientation().toRotationMatrix() * z_rotation(-M_PI/2);
                     robot_hand_orientation = robot_hand_orientation * x_rotation(-M_PI/2);
                     Eigen::Quaterniond robot_hand_q(robot_hand_orientation);
-                    Eigen::Vector3d robot_hand_position = robot_hand_orientation * y_translation(0.045) +  tag6.getPostionFilter();
+                    Eigen::Vector3d robot_hand_position = robot_hand_orientation * y_translation(0.045) +  tag6.getPosition();
 
                     robot_hand.setOrientation(robot_hand_q.normalized());
                     robot_hand.setPostion(robot_hand_position);
@@ -417,10 +417,10 @@ int main(int argc, char **argv)
                 }
                 else if(tag_detected == 7)
                 {
-                    Eigen::Matrix3d robot_hand_orientation = tag7.getOrientationFilter().toRotationMatrix() * z_rotation(-M_PI/2);
+                    Eigen::Matrix3d robot_hand_orientation = tag7.getOrientation().toRotationMatrix() * z_rotation(-M_PI/2);
                     robot_hand_orientation = robot_hand_orientation * x_rotation(M_PI);
                     Eigen::Quaterniond robot_hand_q(robot_hand_orientation);
-                    Eigen::Vector3d robot_hand_position = robot_hand_orientation * z_translation(0.045) +  tag7.getPostionFilter();
+                    Eigen::Vector3d robot_hand_position = robot_hand_orientation * z_translation(0.045) +  tag7.getPosition();
 
                     robot_hand.setOrientation(robot_hand_q.normalized());
                     robot_hand.setPostion(robot_hand_position);
@@ -428,10 +428,10 @@ int main(int argc, char **argv)
                 }
                 else if(tag_detected == 8)
                 {
-                    Eigen::Matrix3d robot_hand_orientation = tag8.getOrientationFilter().toRotationMatrix() * z_rotation(-M_PI/2);
+                    Eigen::Matrix3d robot_hand_orientation = tag8.getOrientation().toRotationMatrix() * z_rotation(-M_PI/2);
                     robot_hand_orientation = robot_hand_orientation * x_rotation(M_PI/2);
                     Eigen::Quaterniond robot_hand_q(robot_hand_orientation);
-                    Eigen::Vector3d robot_hand_position = robot_hand_orientation * y_translation(-0.045) +  tag8.getPostionFilter();
+                    Eigen::Vector3d robot_hand_position = robot_hand_orientation * y_translation(-0.045) +  tag8.getPosition();
 
                     robot_hand.setOrientation(robot_hand_q.normalized());
                     robot_hand.setPostion(robot_hand_position);
@@ -451,15 +451,15 @@ int main(int argc, char **argv)
             tag5_msg.orientation.w = tag5.getOrientation().w();
             tag5_msg.detected.data = tag5.getDetected();
 
-            apriltag_ros::AprilTagDetection tag5_filter_msg;
-            tag5_filter_msg.coordinate_center.x = tag5.getPostionFilter().x();
-            tag5_filter_msg.coordinate_center.y = tag5.getPostionFilter().y();
-            tag5_filter_msg.coordinate_center.z = tag5.getPostionFilter().z();
-            tag5_filter_msg.orientation.x = tag5.getOrientationFilter().x();
-            tag5_filter_msg.orientation.y = tag5.getOrientationFilter().y();
-            tag5_filter_msg.orientation.z = tag5.getOrientationFilter().z();
-            tag5_filter_msg.orientation.w = tag5.getOrientationFilter().w();
-            tag5_filter_msg.detected.data = tag5.getDetected();
+            // apriltag_ros::AprilTagDetection tag5_filter_msg;
+            // tag5_filter_msg.coordinate_center.x = tag5.getPostionFilter().x();
+            // tag5_filter_msg.coordinate_center.y = tag5.getPostionFilter().y();
+            // tag5_filter_msg.coordinate_center.z = tag5.getPostionFilter().z();
+            // tag5_filter_msg.orientation.x = tag5.getOrientationFilter().x();
+            // tag5_filter_msg.orientation.y = tag5.getOrientationFilter().y();
+            // tag5_filter_msg.orientation.z = tag5.getOrientationFilter().z();
+            // tag5_filter_msg.orientation.w = tag5.getOrientationFilter().w();
+            // tag5_filter_msg.detected.data = tag5.getDetected();
             
             // tag6
             apriltag_ros::AprilTagDetection tag6_msg;
@@ -472,15 +472,15 @@ int main(int argc, char **argv)
             tag6_msg.orientation.w = tag6.getOrientation().w();
             tag6_msg.detected.data = tag6.getDetected();
 
-            apriltag_ros::AprilTagDetection tag6_filter_msg;
-            tag6_filter_msg.coordinate_center.x = tag6.getPostionFilter().x();
-            tag6_filter_msg.coordinate_center.y = tag6.getPostionFilter().y();
-            tag6_filter_msg.coordinate_center.z = tag6.getPostionFilter().z();
-            tag6_filter_msg.orientation.x = tag6.getOrientationFilter().x();
-            tag6_filter_msg.orientation.y = tag6.getOrientationFilter().y();
-            tag6_filter_msg.orientation.z = tag6.getOrientationFilter().z();
-            tag6_filter_msg.orientation.w = tag6.getOrientationFilter().w();
-            tag6_filter_msg.detected.data = tag6.getDetected();
+            // apriltag_ros::AprilTagDetection tag6_filter_msg;
+            // tag6_filter_msg.coordinate_center.x = tag6.getPostionFilter().x();
+            // tag6_filter_msg.coordinate_center.y = tag6.getPostionFilter().y();
+            // tag6_filter_msg.coordinate_center.z = tag6.getPostionFilter().z();
+            // tag6_filter_msg.orientation.x = tag6.getOrientationFilter().x();
+            // tag6_filter_msg.orientation.y = tag6.getOrientationFilter().y();
+            // tag6_filter_msg.orientation.z = tag6.getOrientationFilter().z();
+            // tag6_filter_msg.orientation.w = tag6.getOrientationFilter().w();
+            // tag6_filter_msg.detected.data = tag6.getDetected();
 
             // tag7
             apriltag_ros::AprilTagDetection tag7_msg;
@@ -493,15 +493,15 @@ int main(int argc, char **argv)
             tag7_msg.orientation.w = tag7.getOrientation().w();
             tag7_msg.detected.data = tag7.getDetected();
 
-            apriltag_ros::AprilTagDetection tag7_filter_msg;
-            tag7_filter_msg.coordinate_center.x = tag7.getPostionFilter().x();
-            tag7_filter_msg.coordinate_center.y = tag7.getPostionFilter().y();
-            tag7_filter_msg.coordinate_center.z = tag7.getPostionFilter().z();
-            tag7_filter_msg.orientation.x = tag7.getOrientationFilter().x();
-            tag7_filter_msg.orientation.y = tag7.getOrientationFilter().y();
-            tag7_filter_msg.orientation.z = tag7.getOrientationFilter().z();
-            tag7_filter_msg.orientation.w = tag7.getOrientationFilter().w();
-            tag7_filter_msg.detected.data = tag7.getDetected();
+            // apriltag_ros::AprilTagDetection tag7_filter_msg;
+            // tag7_filter_msg.coordinate_center.x = tag7.getPostionFilter().x();
+            // tag7_filter_msg.coordinate_center.y = tag7.getPostionFilter().y();
+            // tag7_filter_msg.coordinate_center.z = tag7.getPostionFilter().z();
+            // tag7_filter_msg.orientation.x = tag7.getOrientationFilter().x();
+            // tag7_filter_msg.orientation.y = tag7.getOrientationFilter().y();
+            // tag7_filter_msg.orientation.z = tag7.getOrientationFilter().z();
+            // tag7_filter_msg.orientation.w = tag7.getOrientationFilter().w();
+            // tag7_filter_msg.detected.data = tag7.getDetected();
 
             // tag8
             apriltag_ros::AprilTagDetection tag8_msg;
@@ -514,15 +514,15 @@ int main(int argc, char **argv)
             tag8_msg.orientation.w = tag8.getOrientation().w();
             tag8_msg.detected.data = tag8.getDetected();
 
-            apriltag_ros::AprilTagDetection tag8_filter_msg;
-            tag8_filter_msg.coordinate_center.x = tag8.getPostionFilter().x();
-            tag8_filter_msg.coordinate_center.y = tag8.getPostionFilter().y();
-            tag8_filter_msg.coordinate_center.z = tag8.getPostionFilter().z();
-            tag8_filter_msg.orientation.x = tag8.getOrientationFilter().x();
-            tag8_filter_msg.orientation.y = tag8.getOrientationFilter().y();
-            tag8_filter_msg.orientation.z = tag8.getOrientationFilter().z();
-            tag8_filter_msg.orientation.w = tag8.getOrientationFilter().w();
-            tag8_filter_msg.detected.data = tag8.getDetected();
+            // apriltag_ros::AprilTagDetection tag8_filter_msg;
+            // tag8_filter_msg.coordinate_center.x = tag8.getPostionFilter().x();
+            // tag8_filter_msg.coordinate_center.y = tag8.getPostionFilter().y();
+            // tag8_filter_msg.coordinate_center.z = tag8.getPostionFilter().z();
+            // tag8_filter_msg.orientation.x = tag8.getOrientationFilter().x();
+            // tag8_filter_msg.orientation.y = tag8.getOrientationFilter().y();
+            // tag8_filter_msg.orientation.z = tag8.getOrientationFilter().z();
+            // tag8_filter_msg.orientation.w = tag8.getOrientationFilter().w();
+            // tag8_filter_msg.detected.data = tag8.getDetected();
 
             // tag10
             apriltag_ros::AprilTagDetection tag10_msg;
@@ -535,15 +535,15 @@ int main(int argc, char **argv)
             tag10_msg.orientation.w = tag10.getOrientation().w();
             tag10_msg.detected.data = tag10.getDetected();
 
-            apriltag_ros::AprilTagDetection tag10_filter_msg;
-            tag10_filter_msg.coordinate_center.x = tag10.getPostionFilter().x();
-            tag10_filter_msg.coordinate_center.y = tag10.getPostionFilter().y();
-            tag10_filter_msg.coordinate_center.z = tag10.getPostionFilter().z();
-            tag10_filter_msg.orientation.x = tag10.getOrientationFilter().x();
-            tag10_filter_msg.orientation.y = tag10.getOrientationFilter().y();
-            tag10_filter_msg.orientation.z = tag10.getOrientationFilter().z();
-            tag10_filter_msg.orientation.w = tag10.getOrientationFilter().w();
-            tag10_filter_msg.detected.data = tag10.getDetected();
+            // apriltag_ros::AprilTagDetection tag10_filter_msg;
+            // tag10_filter_msg.coordinate_center.x = tag10.getPostionFilter().x();
+            // tag10_filter_msg.coordinate_center.y = tag10.getPostionFilter().y();
+            // tag10_filter_msg.coordinate_center.z = tag10.getPostionFilter().z();
+            // tag10_filter_msg.orientation.x = tag10.getOrientationFilter().x();
+            // tag10_filter_msg.orientation.y = tag10.getOrientationFilter().y();
+            // tag10_filter_msg.orientation.z = tag10.getOrientationFilter().z();
+            // tag10_filter_msg.orientation.w = tag10.getOrientationFilter().w();
+            // tag10_filter_msg.detected.data = tag10.getDetected();
 
             // tiago hand 
             geometry_msgs::PoseStamped tiago_hand_msg;
@@ -569,11 +569,11 @@ int main(int argc, char **argv)
             tag8_publisher.publish(tag8_msg);
             tag10_publisher.publish(tag10_msg);
 
-            tag5_filter_publisher.publish(tag5_filter_msg);
-            tag6_filter_publisher.publish(tag6_filter_msg);
-            tag7_filter_publisher.publish(tag7_filter_msg);
-            tag8_filter_publisher.publish(tag8_filter_msg);
-            tag10_filter_publisher.publish(tag10_filter_msg);
+            // tag5_filter_publisher.publish(tag5_filter_msg);
+            // tag6_filter_publisher.publish(tag6_filter_msg);
+            // tag7_filter_publisher.publish(tag7_filter_msg);
+            // tag8_filter_publisher.publish(tag8_filter_msg);
+            // tag10_filter_publisher.publish(tag10_filter_msg);
 
             rh_pose_publisher.publish(tiago_hand_msg);
             pose_publisher.publish(robot_hand_msg);
