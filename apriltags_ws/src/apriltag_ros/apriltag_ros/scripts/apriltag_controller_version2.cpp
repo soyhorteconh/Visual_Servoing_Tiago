@@ -53,10 +53,9 @@ Eigen::Matrix3d z_rotation(double radians)
 }
 
 // to get target point from tag point
-std::pair<Eigen::Vector3d,Eigen::Matrix3d> tag_2_targetpoint(Eigen::Vector3d position, Eigen::Matrix3d rotation, double distance_tag_2_target)
+std::pair<Eigen::Vector3d,Eigen::Matrix3d> tag_2_targetpoint(Eigen::Vector3d position, Eigen::Matrix3d rotation, Eigen::Vector3d distance2tag)
 {
     Eigen::Matrix3d target_rotation = rotation * y_rotation(M_PI/2);
-    Eigen::Vector3d distance2tag(0.0,0.0,distance_tag_2_target);
     Eigen::Vector3d target_position = position + rotation * distance2tag;
 
     std::pair<Eigen::Vector3d,Eigen::Matrix3d> target_pose(target_position, target_rotation);
@@ -144,6 +143,16 @@ int main (int argc, char **argv)
     std::string prefix_vel_lin = "/tasks/seiko/gripper_tip_frame/cmd_vel_lin_";
     std::string prefix_vel_ang = "/tasks/seiko/gripper_tip_frame/cmd_vel_ang_";
 
+    // state machine variables
+    int reset = 0;
+    int prev_state = 0;
+    float gripper = 0.0; 
+    double angular_error;
+    double linear_error;
+
+    // time 
+    double third_state = ros::Time::now().toSec();
+
     // to start simulation 
     std::string start;
     std::cout << "PRESS any key to continue: ";
@@ -157,7 +166,7 @@ int main (int argc, char **argv)
         std::cout << "Tag: " << tag10_detected.detected;
 
         // first time detected
-        if (flag == false and robot_hand_detected.detected.data == true and tag10_detected.detected.data == true)
+        if (flag == false and robot_hand_detected.detected.data == true and tag10_detected.detected.data == true and gripper == 0.0)
         {
             // robot hand 
             //      position
@@ -200,10 +209,35 @@ int main (int argc, char **argv)
             tag_rotation = t_q.normalized().toRotationMatrix();
 
             // calculating target pose from tag pose
-            double distance_tag_2_target = 0.3; 
+            Eigen::Vector3d distance2tag;
+            if (prev_state == 0)
+            {
+                // bottle configuration
+                // distance2tag.x() = -0.18;
+                // distance2tag.y() = 0.01;
+                // distance2tag.z() = 0.35;
+
+                // dish washer configuration
+                distance2tag.x() = 0.0;
+                distance2tag.y() = -0.15;
+                distance2tag.z() = 0.35;
+            }
+            else if (prev_state == 1)
+            {
+                //bottle configuration
+                // distance2tag.x() = -0.18;
+                // distance2tag.y() = 0.01;
+                // distance2tag.z() = 0.07;
+
+                // dish washer configuration
+                distance2tag.x() = 0.0;
+                distance2tag.y() = -0.15;
+                distance2tag.z() = 0.35;
+            }
+
 
             std::pair<Eigen::Vector3d, Eigen::Matrix3d> target_point = tag_2_targetpoint (
-                tag_position, tag_rotation, distance_tag_2_target);
+                tag_position, tag_rotation, distance2tag);
 
             Eigen::Matrix3d target_rotation = target_point.second;
             Eigen::Quaterniond target_rotation_q (target_rotation);
@@ -212,14 +246,13 @@ int main (int argc, char **argv)
             // velocity controller parameters
             double linear_kp = 0.1;
             double angular_kp = 0.3;
-            double linear_max_velocity = 0.03;
+            double linear_max_velocity = 0.04;
             double angular_max_velocity = 0.08;
             double dt = 0.0333;
 
             Eigen::Vector3d linear_v;
             Eigen::Vector3d angular_v;
             // hand open
-            float gripper = 0.0; 
 
             Eigen::Vector3d position_error;
             Eigen::Quaterniond rotation_error;
@@ -227,8 +260,15 @@ int main (int argc, char **argv)
             Eigen::Matrix3d estimated_rotation;
             Eigen::Vector3d estimated_position;
 
-            if (robot_hand_detected.detected.data == true and tag10_detected.detected.data == true)
+            double time = ros::Time::now().toSec() - third_state;
+            std::cout << "Time: " << time << std::endl;
+
+            // action states
+            // first and second state 
+            //controller
+            if (robot_hand_detected.detected.data == true and tag10_detected.detected.data == true and gripper == 0.0)
             {
+
                 // controller
                 VelocityControl velocity_control(dt, linear_kp, angular_kp, linear_max_velocity, angular_max_velocity);
                 std::pair <Eigen::Vector3d, Eigen::Vector3d> velocity = velocity_control.controller(
@@ -261,30 +301,49 @@ int main (int argc, char **argv)
                 //robot_hand_position = estimated_position;
                 // robot_hand_rotation = estimated_rotation;
                 // rh_q = Eigen::Quaterniond(estimated_rotation);
+
+                third_state = ros::Time::now().toSec();
             } 
-            else
+            else if (gripper == 1.0 and time > 0.5 and time < 1.5)
+            {
+                linear_v.x() = 0.0;
+                linear_v.y() = 0.0;
+                linear_v.z() = 0.08;
+                angular_v.setZero();
+            } 
+            else 
             {
                 linear_v.setZero();
                 angular_v.setZero();
             }
 
-            // gripper
-            //when error < 0.0085 linear
-            //when error < 0.0085 angular
+            angular_error = inria::MatrixToAxis(rotation_error.toRotationMatrix()).norm();
+            linear_error = position_error.norm();
 
-            double angular_error = inria::MatrixToAxis(rotation_error.toRotationMatrix()).norm();
-            double linear_error = position_error.norm();
-            
-            if(angular_error < 0.45 and linear_error < 0.015)
+            // transitions states
+            // second state (transition)
+            if(prev_state == 0 and angular_error < 0.45 and linear_error < 0.015)
             {
-                //hand close
+                prev_state = 5;
+            } 
+            // third state (transition)
+            else if (prev_state == 1 and angular_error < 0.45 and linear_error < 0.015)
+            {
+                // hand close
+                std::cout << "Aqiii stoiii" << std::endl;
                 gripper = 1.0;
             }
+
+            // //third state (actions)
+            // if (gripper == 1.0)
+            // {
+            //     // set angular and linear velocity to 0.0
+            //     std::cout << "State 3" << std::endl;
+            // }
 
             std::cout << "Linear error: " << linear_error << std::endl;
             std::cout << "Angular error: " <<  angular_error << std::endl;
             std::cout << "Gripper: " << gripper << std::endl;
-
 
             Eigen::Quaterniond estimated_rotation_q(estimated_rotation);
             geometry_msgs::Pose error;
