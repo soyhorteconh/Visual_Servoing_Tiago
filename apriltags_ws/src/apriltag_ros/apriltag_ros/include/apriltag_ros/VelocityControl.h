@@ -46,10 +46,10 @@ class VelocityControl
             // error
             rotation_error = current_rotation.transpose() * desired_rotation;
             position_error = current_rotation.transpose() * (desired_position - current_position);
-            std::cout << "Error position" << std::endl;
-            std::cout << "x: " << position_error.x() << std::endl;
-            std::cout << "y: " << position_error.y() << std::endl;
-            std::cout << "z: " << position_error.z() << std::endl;
+            // std::cout << "Error position" << std::endl;
+            // std::cout << "x: " << position_error.x() << std::endl;
+            // std::cout << "y: " << position_error.y() << std::endl;
+            // std::cout << "z: " << position_error.z() << std::endl;
 
             // velocity
             Eigen::Vector3d angular_v = angular_kp * (inria::MatrixToAxis(rotation_error));

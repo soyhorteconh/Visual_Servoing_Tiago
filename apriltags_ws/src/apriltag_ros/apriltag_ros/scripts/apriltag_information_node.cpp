@@ -1,3 +1,8 @@
+/*
+Hortencia Alejandra Ramirez Vazquez
+23rd november, 2023
+*/
+
 #include "ros/ros.h"
 #include "apriltag_ros/AprilTagDetectionArray.h"
 #include "apriltag_ros/AprilTagDetection.h"

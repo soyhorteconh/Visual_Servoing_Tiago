@@ -1,3 +1,8 @@
+/*
+Hortencia Alejandra Ramirez Vazquez
+23rd november, 2023
+*/
+
 #include <apriltag_ros/VelocityControl.h>
 #include <apriltag_ros/AprilTagDetection.h>
 #include <apriltag_ros/RobotHand.h>
@@ -15,6 +20,7 @@
 
 ros::Publisher marker_publisher;
 apriltag_ros::AprilTagDetection tag10_detected;
+apriltag_ros::AprilTagDetection tag20_detected;
 apriltag_ros::RobotHand robot_hand_detected;
 
 // callbacks
@@ -23,6 +29,13 @@ void tag10_cb(const apriltag_ros::AprilTagDetection::ConstPtr &msg)
     tag10_detected.coordinate_center = msg -> coordinate_center;
     tag10_detected.orientation = msg -> orientation;
     tag10_detected.detected = msg -> detected;
+}
+
+void tag20_cb(const apriltag_ros::AprilTagDetection::ConstPtr &msg)
+{
+    tag20_detected.coordinate_center = msg -> coordinate_center;
+    tag20_detected.orientation = msg -> orientation;
+    tag20_detected.detected = msg -> detected;
 }
 
 void robot_hand_cb(const apriltag_ros::RobotHand::ConstPtr &msg)
@@ -123,6 +136,7 @@ int main (int argc, char **argv)
     // subscribers
     ros::Subscriber robot_hand_subscriber = n.subscribe("robot_hand/pose", 1, robot_hand_cb); 
     ros::Subscriber tag10_subscriber = n.subscribe("tag10/filter", 1, tag10_cb);
+    ros::Subscriber tag20_subscriber = n.subscribe("tag20/filter", 1, tag20_cb);
 
     // variables
     bool flag = false;
@@ -161,9 +175,15 @@ int main (int argc, char **argv)
     ros::Rate loop_rate(30);
     while(ros::ok())
     {
-        std::cout << "Flag: " << flag << std::endl;
-        std::cout << "Robot Hand: " << robot_hand_detected.detected;
-        std::cout << "Tag: " << tag10_detected.detected;
+        // std::cout << "Flag: " << flag << std::endl;
+        // std::cout << "Robot Hand: " << robot_hand_detected.detected;
+        // std::cout << "Tag: " << tag10_detected.detected;
+
+        double distance_open_drawer = tag10_detected.coordinate_center.z - tag20_detected.coordinate_center.z;
+        std::cout << "distance: " << distance_open_drawer << std::endl;
+        std::cout << "real distance: " << tag10_detected.coordinate_center.z << std::endl;
+        double new_distance = tag10_detected.coordinate_center.z - distance_open_drawer;
+        std::cout << "new distance: " << new_distance << std::endl;
 
         // first time detected
         if (flag == false and robot_hand_detected.detected.data == true and tag10_detected.detected.data == true and gripper == 0.0)
@@ -181,7 +201,7 @@ int main (int argc, char **argv)
             //      position
             tag_position.x() = tag10_detected.coordinate_center.x;
             tag_position.y() = tag10_detected.coordinate_center.y;
-            tag_position.z() = tag10_detected.coordinate_center.z;
+            tag_position.z() = tag10_detected.coordinate_center.z - distance_open_drawer;
             //      orientation
             Eigen::Quaterniond t_q (tag10_detected.orientation.w, tag10_detected.orientation.x, tag10_detected.orientation.y, tag10_detected.orientation.z);
             tag_rotation = t_q.toRotationMatrix();
@@ -218,7 +238,7 @@ int main (int argc, char **argv)
                 // distance2tag.z() = 0.35;
 
                 // dish washer configuration
-                distance2tag.x() = 0.0;
+                distance2tag.x() = 0.03;
                 distance2tag.y() = -0.15;
                 distance2tag.z() = 0.35;
             }
@@ -231,8 +251,8 @@ int main (int argc, char **argv)
 
                 // dish washer configuration
                 distance2tag.x() = 0.0;
-                distance2tag.y() = -0.15;
-                distance2tag.z() = 0.35;
+                distance2tag.y() = -0.16;
+                distance2tag.z() = 0.12;
             }
 
 
@@ -244,10 +264,10 @@ int main (int argc, char **argv)
             Eigen::Vector3d target_position = target_point.first;
 
             // velocity controller parameters
-            double linear_kp = 0.1;
-            double angular_kp = 0.3;
+            double linear_kp = 0.3;
+            double angular_kp = 0.4;
             double linear_max_velocity = 0.04;
-            double angular_max_velocity = 0.08;
+            double angular_max_velocity = 0.1;
             double dt = 0.0333;
 
             Eigen::Vector3d linear_v;
@@ -279,9 +299,9 @@ int main (int argc, char **argv)
                 
                 //velocity
                 linear_v = velocity.first;
-                //angular_v.setZero();
-                //linear_v.setZero();
                 angular_v = velocity.second;
+                //linear_v.setZero();
+                //angular_v.setZero();
                 
                 // getting estimated values
                 estimated_rotation = velocity_control.get_estimated_rotation();
@@ -304,11 +324,11 @@ int main (int argc, char **argv)
 
                 third_state = ros::Time::now().toSec();
             } 
-            else if (gripper == 1.0 and time > 0.5 and time < 1.5)
+            else if (gripper == 1.0 and time > 1 and time < 10)
             {
-                linear_v.x() = 0.0;
-                linear_v.y() = 0.0;
-                linear_v.z() = 0.08;
+                linear_v.x() = -0.04;
+                linear_v.y() = 0.004;
+                linear_v.z() = 0.002;
                 angular_v.setZero();
             } 
             else 
@@ -322,16 +342,17 @@ int main (int argc, char **argv)
 
             // transitions states
             // second state (transition)
-            if(prev_state == 0 and angular_error < 0.45 and linear_error < 0.015)
+            if(prev_state == 0 and angular_error < 0.045 and linear_error < 0.01)
             {
-                prev_state = 5;
+                prev_state = 1;
             } 
             // third state (transition)
-            else if (prev_state == 1 and angular_error < 0.45 and linear_error < 0.015)
+            else if (prev_state == 1 and angular_error < 0.045 and linear_error < 0.01)
             {
                 // hand close
-                std::cout << "Aqiii stoiii" << std::endl;
+                std::cout << "Gripper has closed" << std::endl;
                 gripper = 1.0;
+                //prev_state = 5;
             }
 
             // //third state (actions)
