@@ -159,7 +159,7 @@ int main (int argc, char **argv)
 
     // state machine variables
     int reset = 0;
-    int prev_state = 0;
+    int state = 0;
     float gripper = 0.0; 
     double angular_error;
     double linear_error;
@@ -175,18 +175,19 @@ int main (int argc, char **argv)
     ros::Rate loop_rate(30);
     while(ros::ok())
     {
-        // std::cout << "Flag: " << flag << std::endl;
-        // std::cout << "Robot Hand: " << robot_hand_detected.detected;
-        // std::cout << "Tag: " << tag10_detected.detected;
+        std::cout << "----------------------------" << std::endl;
 
         double distance_open_drawer = tag10_detected.coordinate_center.z - tag20_detected.coordinate_center.z;
-        std::cout << "distance: " << distance_open_drawer << std::endl;
-        std::cout << "real distance: " << tag10_detected.coordinate_center.z << std::endl;
-        double new_distance = tag10_detected.coordinate_center.z - distance_open_drawer;
-        std::cout << "new distance: " << new_distance << std::endl;
+        std::cout << "Drawer openning distance: " << distance_open_drawer << std::endl;
+
+        double distance_hand_robot = tag10_detected.coordinate_center.z - robot_hand_detected.pose.pose.position.z;
+        std::cout << "Robot hand distance: " << distance_hand_robot;
+        //std::cout << "real distance: " << tag10_detected.coordinate_center.z << std::endl;
+        //double new_distance = tag10_detected.coordinate_center.z - distance_open_drawer;
+        //std::cout << "new distance: " << new_distance << std::endl;
 
         // first time detected
-        if (flag == false and robot_hand_detected.detected.data == true and tag10_detected.detected.data == true and gripper == 0.0)
+        if (flag == false and robot_hand_detected.detected.data == true and tag10_detected.detected.data == true)
         {
             // robot hand 
             //      position
@@ -212,13 +213,6 @@ int main (int argc, char **argv)
         if(flag == true)
         {
 
-            std::cout << "----------------------------" << std::endl;
-            // std::cout << "Tag position " << std::endl << tag_position << std::endl;
-            // std::cout << "Tag rotation " << std::endl << tag_rotation << std::endl;
-            // std::cout << "Robot Hand position " << std::endl << robot_hand_position << std::endl;
-            // std::cout << "Robot Hand rotation " << std::endl << robot_hand_rotation << std::endl;
-            //std::cout << "----------------------------" << std::endl;
-
             // updating tag information
             //      position
             tag_position.x() = tag10_detected.coordinate_center.x;
@@ -230,7 +224,7 @@ int main (int argc, char **argv)
 
             // calculating target pose from tag pose
             Eigen::Vector3d distance2tag;
-            if (prev_state == 0)
+            if (state == 0)
             {
                 // bottle configuration
                 // distance2tag.x() = -0.18;
@@ -242,7 +236,7 @@ int main (int argc, char **argv)
                 distance2tag.y() = -0.15;
                 distance2tag.z() = 0.35;
             }
-            else if (prev_state == 1)
+            else if (state == 1)
             {
                 //bottle configuration
                 // distance2tag.x() = -0.18;
@@ -253,6 +247,58 @@ int main (int argc, char **argv)
                 distance2tag.x() = 0.0;
                 distance2tag.y() = -0.16;
                 distance2tag.z() = 0.12;
+            }
+            else if (state == 3)
+            {
+                // dish washer configuration
+                distance2tag.x() = 0.0;
+                distance2tag.y() = -0.11;
+                distance2tag.z() = 0.62;
+            }
+            //newwwww
+            else if (state == 4)
+            {
+                // dish washer configuration
+                distance2tag.x() = -0.15;
+                distance2tag.y() = -0.03;
+                distance2tag.z() = 0.62;
+            }
+            //newwww
+            else if (state == 5)
+            {
+                // dish washer configuration
+                distance2tag.x() = 0.0;
+                distance2tag.y() = -0.11;
+                distance2tag.z() = 0.62;
+            }
+            else if (state == 6)
+            {
+                // dish washer configuration
+                distance2tag.x() = 0.0;
+                distance2tag.y() = -0.13;
+                distance2tag.z() = 0.5;
+            }
+            else if (state == 7)
+            {
+                
+                // dish washer configuration
+                distance2tag.x() = 0.0;
+                distance2tag.y() = -0.16;
+                distance2tag.z() = 0.13;
+            }
+            else if (state == 8)
+            {
+                // dish washer configuration
+                distance2tag.x() = 0.03;
+                distance2tag.y() = -0.14;
+                distance2tag.z() = 0.35;
+            }
+            else if (state == 9)
+            {
+                // dish washer configuration
+                distance2tag.x() = -0.14;
+                distance2tag.y() = -0.1;
+                distance2tag.z() = 0.45;
             }
 
 
@@ -286,7 +332,7 @@ int main (int argc, char **argv)
             // action states
             // first and second state 
             //controller
-            if (robot_hand_detected.detected.data == true and tag10_detected.detected.data == true and gripper == 0.0)
+            if (robot_hand_detected.detected.data == true and tag10_detected.detected.data == true)
             {
 
                 // controller
@@ -318,20 +364,32 @@ int main (int argc, char **argv)
                 robot_hand_position = velocity_control.get_predicted_position(measured_position, 0.1);
                 rh_q = velocity_control.get_predicted_rotation(measured_rotation, 0.5);
                 robot_hand_rotation = rh_q.normalized().toRotationMatrix();
-                //robot_hand_position = estimated_position;
-                // robot_hand_rotation = estimated_rotation;
-                // rh_q = Eigen::Quaterniond(estimated_rotation);
 
-                third_state = ros::Time::now().toSec();
             } 
-            else if (gripper == 1.0 and time > 1 and time < 10)
+            
+            
+            if (state == 2 and time > 1 and distance_open_drawer < 0.18)
             {
                 linear_v.x() = -0.04;
-                linear_v.y() = 0.004;
-                linear_v.z() = 0.002;
-                angular_v.setZero();
+                linear_v.y() = 0.02;
+                linear_v.z() = 0.001;
+                //angular_v.setZero();
             } 
-            else 
+            else if (state == 3 and time < 1.5)
+            {
+                linear_v.setZero();
+                angular_v.setZero();
+                gripper = 0.0;
+            }
+            // else if (state == 5 and time < 1)
+            // {
+            //     // linear_v.x() = 0.04;
+            //     // linear_v.y() = 0.0;
+            //     // linear_v.z() = 0.003;
+            //     linear_v.setZero();
+            //     angular_v.setZero();
+            // }
+            else if (state == 10)
             {
                 linear_v.setZero();
                 angular_v.setZero();
@@ -342,30 +400,61 @@ int main (int argc, char **argv)
 
             // transitions states
             // second state (transition)
-            if(prev_state == 0 and angular_error < 0.045 and linear_error < 0.01)
+            if(state == 0 and angular_error < 0.045 and linear_error < 0.01)
             {
-                prev_state = 1;
+                state = 1;
             } 
             // third state (transition)
-            else if (prev_state == 1 and angular_error < 0.045 and linear_error < 0.01)
+            else if (state == 1 and angular_error < 0.045 and linear_error < 0.01)
             {
                 // hand close
-                std::cout << "Gripper has closed" << std::endl;
+                //std::cout << "Gripper has closed" << std::endl;
                 gripper = 1.0;
-                //prev_state = 5;
+                state = 2;
+                third_state = ros::Time::now().toSec();
+            }
+            else if (state == 2 and distance_open_drawer > 0.18)
+            {
+                state = 3;
+                third_state = ros::Time::now().toSec();
+            }
+            else if (state == 3 and angular_error < 0.045 and linear_error < 0.01)
+            {
+                state = 4;
+            }
+            else if (state == 4 and angular_error < 0.045 and linear_error < 0.01)
+            {
+                state = 5;
+            }
+            else if (state == 5 and angular_error < 0.045 and linear_error < 0.01)
+            {
+                state = 6;
+            }
+            else if (state == 6 and angular_error < 0.045 and linear_error < 0.01)
+            {
+                state = 7;
+                //gripper = 1.0;
+                third_state = ros::Time::now().toSec();
+            }
+            else if (state == 7 and angular_error < 0.045 and linear_error < 0.01)
+            {
+                state = 8;
+            }
+            else if (state == 8 and angular_error < 0.045 and linear_error < 0.01)
+            {
+                state = 9;
+            }
+            else if (state == 9 and angular_error < 0.045 and linear_error < 0.01)
+            {
+                state = 10;
             }
 
-            // //third state (actions)
-            // if (gripper == 1.0)
-            // {
-            //     // set angular and linear velocity to 0.0
-            //     std::cout << "State 3" << std::endl;
-            // }
 
             std::cout << "Linear error: " << linear_error << std::endl;
             std::cout << "Angular error: " <<  angular_error << std::endl;
-            std::cout << "Gripper: " << gripper << std::endl;
+            // std::cout << "Gripper: " << gripper << std::endl;
 
+            std::cout << "STATE**: " << state << std::endl;
             Eigen::Quaterniond estimated_rotation_q(estimated_rotation);
             geometry_msgs::Pose error;
             error.position.x = position_error.x();
