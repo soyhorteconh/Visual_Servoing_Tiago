@@ -9,3 +9,4 @@ The RoboHand Navigator project advances robotic manipulation through the integra
 
 ###### Documentation ######
 [Link to documentation](https://drive.google.com/file/d/1bIVubGLM0iDX9oLKol93qxsPTGiDtII_/view?usp=sharing)
+[Slides](https://docs.google.com/presentation/d/1TWhAPV7DKv87UuggAT2B61tl058ORQELGB2JByFGZbM/edit?usp=sharing)
