@@ -3,5 +3,5 @@ The RoboHand Navigator project advances robotic manipulation through the integra
 - ./buil.sh : to build image from dockerfile
 - ./launch_bash.sh : to run container
 
-[![Alt text](https://img.youtube.com/vi/yUcmC3FrjIs/0.jpg)](https://www.youtube.com/watch?v=yUcmC3FrjIs)
+[![Watch the video: ](https://img.youtube.com/vi/yUcmC3FrjIs/0.jpg)](https://www.youtube.com/watch?v=yUcmC3FrjIs)
 
