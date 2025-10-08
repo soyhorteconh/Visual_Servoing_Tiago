@@ -1,4 +1,4 @@
-# Enhancing TIAGo Robot Capabilities: Introducing Azure Kinect DK for Advanced Grasping a drawer of a dishwasher
+# TIAGo Visual Servoing: Azure Kinect DK for Grasping a dishwasher drawer
 This research project illustrates robotic manipulation through the integration of visual markers, the Azure Kinect DK sensor, and the TIAGo robot. It addresses challenges in marker detection accuracy, robot hand pose estimation, and efficient object manipulation to open and close a drawer. The project showcases real-time algorithm capabilities with improved marker detection and consistent pose predictions. Reducing time execution.
 
 ## How to start the environment? ##
